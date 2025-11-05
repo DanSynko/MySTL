@@ -101,7 +101,6 @@ namespace my_std {
                 *end = a;
                 end++;
                 arr_size++;
-                std::cout << "Element was added." << std::endl;
                 show_vector();
             }
             /*else if (arr_size >= arr_capacity) {
@@ -118,11 +117,13 @@ namespace my_std {
         void erase() {
             show_vector();
         }
-        T* front() {
-            return *begin;
+        T& front() {
+            T& front_ref = *begin;
+            return front_ref;
         }
-        T* back() {
-            return *end;
+        T& back() {
+            T& back_ref = *end;
+            return back_ref;
         }
         T* data() {
             return arr;
@@ -159,19 +160,28 @@ int main()
     std::cout << "my_std::resize()" << std::endl;
     my_vector.resize(3);
     std::cout << "" << std::endl;
-    /*std::cout << "my_std::push_back()" << std::endl;
+    std::cout << "my_std::push_back()" << std::endl;
     my_vector.push_back(10);
+    std::cout << "" << std::endl;
     std::cout << "my_std::pop_back()" << std::endl;
-    my_vector.pop_back();*/
-    /*std::cout << "my_std::reserve()" << std::endl;
-    my_vector.reserve(50);*/
-    /* front_el = my_vector.front();
-    std::cout << "my_std::front()" << front_el << std::endl;*/
-    /*my_vector.front();
+    my_vector.pop_back();
+    my_vector.show_vector();
+    std::cout << "" << std::endl;
+    std::cout << "my_std::reserve()" << std::endl;
+    my_vector.reserve(50);
+    std::cout << "" << std::endl;
+    std::cout << "my_std::front()" << std::endl;
+    int& front_element = my_vector.front();
+    std::cout << front_element << std::endl;
+    std::cout << "" << std::endl;
     std::cout << "my_std::back()" << std::endl;
-    my_vector.back();
+    int& back_element = my_vector.back();
+    std::cout << back_element << std::endl;
+    std::cout << "" << std::endl;
     std::cout << "my_std::data()" << std::endl;
-    my_vector.data();*/
+    int* data_element = my_vector.data();
+    std::cout << data_element << std::endl;
+    std::cout << "" << std::endl;
     /*std::cout << "my_std::insert()" << std::endl;
     my_vector.insert();*/
     return 0;
