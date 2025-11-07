@@ -11,8 +11,8 @@ namespace my_std {
         T* begin_it;
         T* end_it;
         T* end_capacity;
-        int arr_size;
-        int arr_capacity;
+        size_t arr_size;
+        size_t arr_capacity;
     public:
         MyVector() : arr_size(10), arr_capacity(40) {
             arr = new T[arr_capacity];
@@ -21,7 +21,7 @@ namespace my_std {
             end_capacity = &arr[arr_capacity];
         }
         MyVector(const MyVector& other) {
-            std::cout << "Constructor of deep copy called: " << std::endl;
+            std::cout << "The deep copy constructor was called: " << std::endl;
             this->arr = new T[other.arr_capacity];
             this->arr_size = other.arr_size;
             this->end_it = &this->arr[this->arr_size];
@@ -36,20 +36,27 @@ namespace my_std {
             this->end_capacity = new_end_capacity;
             this->show_vector();
         }
-        /*MyVector(MyVector&& other) noexcept {
-            
-        }*/
-        ~MyVector() {
-            delete[] arr;
-            begin_it = nullptr;
-            end_it = nullptr;
-            end_capacity = nullptr;
+        MyVector(MyVector&& other) noexcept {
+            std::cout << "The move constructor was called: " << std::endl;
+            this->arr = other.arr;
+            this->begin_it = other.begin_it;
+            this->end_it = other.end_it;
+            this->end_capacity = other.end_capacity;
+            other.arr = nullptr;
+            other.begin_it = nullptr;
+            other.end_it = nullptr;
+            other.end_capacity = nullptr;
+            this->show_vector();
         }
         MyVector& operator=(const MyVector& other) {
-            delete this->arr;
-            this->arr = new T[other.arr_size];
-            for (int i = 0; i < other.arr_size; i++) {
+            std::cout << "The deep copy operator= was called: " << std::endl;
+            delete[] this->arr;
+            this->arr = new T[other.arr_capacity];
+            /*for (int i = 0; i < other.arr_size; i++) {
                 this->arr[i] = other.arr[i];
+            }*/
+            for (T* ptr = other.begin_it, i = this->arr; ptr != other.end_it; ptr++, i++) {
+                *i = *ptr;
             }
             //T* old_arr = other.arr;
             this->arr_size = other.arr_size;
@@ -57,12 +64,30 @@ namespace my_std {
             this->begin_it = this->arr;
             this->end_it = &this->arr[arr_size];
             this->end_capacity = &this->arr[arr_capacity];
+            this->show_vector();
             return *this;
         }
-        /*MyVector& operator=(MyVector&& other) noexcept {
-
+        MyVector& operator=(MyVector&& other) noexcept {
+            std::cout << "The move operator= was called: " << std::endl;
+            this->arr = other.arr;
+            this->begin_it = other.begin_it;
+            this->end_it = other.end_it;
+            this->end_capacity =      other.end_capacity;
+            other.arr = nullptr;
+            other.begin_it = nullptr;
+            other.end_it = nullptr;
+            other.end_capacity = nullptr;
+            this->show_vector();
             return *this;
-        }*/
+        }
+        ~MyVector() {
+            std::cout << "The destructor was called: " << std::endl;
+            //std::cout << "Now desctructor for: " << *this << std::endl;
+            delete[] arr;
+            begin_it = nullptr;
+            end_it = nullptr;
+            end_capacity = nullptr;
+        }
         void show_vector() {
             for (T* ptr = begin_it; ptr != end_it; ptr++) {
                 std::cout << *ptr << ". ";
@@ -71,78 +96,63 @@ namespace my_std {
         }
         void create_some_arr() {
             for (int i = 0; i < arr_size; i++) {
-                arr[i] = i;
+                arr[i] = i+3;
             }
             show_vector();
         }
+        void reallocation() {
+            if (arr_capacity <= arr_size) {
+                arr_capacity *= 1.5;
+                T* new_arr = new T[arr_capacity];
+                for (T* ptr = begin_it, i = new_arr; ptr != end_it; ptr++, i++) {
+                    *i = *ptr;
+                }
+                delete[] arr;
+                arr = new_arr;
+                begin_it = arr;
+                end_it = &new_arr[arr_size];
+                end_capacity = &new_arr[arr_capacity];
+            }
+        }
         // The method's complexity should be O(n)(linear time)
         void resize(int new_size) {
-            if (arr_capacity > new_size) {
-                std::cout << "old size: ";
-                size();
-                int old_size = arr_size;
-                arr_size = new_size;
-                if (arr_size > old_size) {
-                    for (int i = old_size; i < arr_size; i++) {
-                        arr[i] = 0;
-                    }
+            reallocation();
+            std::cout << "old size: ";
+            size();
+            int old_size = arr_size;
+            arr_size = new_size;
+            if (arr_size > old_size) {
+                for (int i = old_size; i < arr_size; i++) {
+                    arr[i] = 1;
                 }
-                else if (arr_size < old_size) {
-                    for (int i = arr_size; i < old_size; i++) {
-                        end_it--;
-                    }
-                }
-                begin_it = arr;
-                end_it = &arr[arr_size];
-                end_capacity = &arr[arr_capacity];
-                std::cout << "new size: ";
-                size();
             }
+            else if (arr_size < old_size) {
+                for (int i = arr_size; i < old_size; i++) {
+                    end_it--;
+                }
+            }
+            begin_it = arr;
+            end_it = &arr[arr_size];
+            end_capacity = &arr[arr_capacity];
+            std::cout << "new size: ";
+            size();
             show_vector(); 
         }
         // O(1)(constant time)
         void push_back(T a) {
-            if (arr_size < arr_capacity) {
-                *end_it = a;
-                end_it++;
-                arr_size++;
-                show_vector();
-            }
-            /*else if (arr_size >= arr_capacity) {
-                
-            }
-            std::cout << "Element was added." << std::endl;*/
+            reallocation();
+            *end_it = a;
+            end_it++;
+            arr_size++;
+            show_vector();
         }
         // The method's complexity should be O(1)
         void pop_back() {
-            arr_size--;
             end_it--;
+            arr_size--;
         }
         void insert(T* iterator_position, const int val) {
-            if (arr_size >= arr_capacity) {
-                // copy
-                //new_arr_capacity = arr_capacity * 1.5;
-                //T* new_arr = new T[new_arr_capacity];
-                //int i = 0;
-                //for (T* ptr = begin_it; ptr != end_it; ptr++) {
-                //    new_arr[i] = *ptr;
-                //    //iterator_position++;
-                //}
-                //iterator_position = new_arr;
-                //end_capacity = &new_arr[new_arr_capacity];
-                //for (T* ptr = iterator_position + 1; ptr != end_capacity; ptr++) {
-                //    *iterator_position = *ptr;
-                //    //iterator_position++;
-                //}
-                //iterator_position = begin_it;
-                //end_it = &new_arr[arr_size];
-                //delete[] arr;
-                //arr = new_arr;
-
-                /*new_arr_capacity = arr_capacity * 1.5;
-                T* new_arr = new T[new_arr_capacity];*/
-
-            }
+            reallocation();
             // O(n)
             if (iterator_position != end()) {
                 // shift
@@ -161,10 +171,10 @@ namespace my_std {
             show_vector();
         }
         /*void insert(const T* iterator_position, int n) {
-            
+            reallocation();
         }*/
         /*void insert(const T* iterator_begin, int n, const T* iterator_end,) {
-            
+            reallocation();
         }*/
         // O(n)
         /*void erase(T* iterator_position) {
@@ -181,7 +191,8 @@ namespace my_std {
             return front_ref;
         }
         T& back() {
-            T& back_ref = *end_it;
+            T* back_it = end_it - 1;
+            T& back_ref = *back_it;
             return back_ref;
         }
         T* data() {
@@ -225,13 +236,17 @@ namespace my_std {
             show_vector();
         }
         void shrink_to_fit() {
-            // unfinished code
-            delete[] arr;
             arr_capacity = arr_size;
-            arr = new T[arr_capacity];
+            T* new_arr = new T[arr_capacity];
+            for (T* ptr = begin_it, i = new_arr; ptr != end_it; ptr++, i++) {
+                *i = *ptr;
+            }
+            delete[] arr;
+            arr = new_arr;
             begin_it = arr;
-            end_it = &arr[arr_size];
-            end_capacity = &arr[arr_capacity];
+            end_it = &new_arr[arr_size];
+            end_capacity = &new_arr[arr_capacity];
+            show_vector();
         }
     };
 }
@@ -273,8 +288,8 @@ int main()
     int* data_element = my_vector.data();
     std::cout << data_element << std::endl;
     std::cout << "" << std::endl;
-    std::cout << "my_std::insert() - some value in some position" << std::endl;
-    my_vector.insert(my_vector.begin() + 7, 15);
+    /*std::cout << "my_std::insert() - some value in some position" << std::endl;
+    my_vector.insert(my_vector.begin() + 7, 15);*/
     /*std::cout << "my_std::insert() - some values in some position" << std::endl;
     my_vector.insert(my_vector.begin(), 15, 20, 25);
     std::cout << "my_std::insert() - some values in range" << std::endl;
@@ -290,17 +305,19 @@ int main()
     catch (std::out_of_range& e) {
         std::cout << "Error: " << e.what() << std::endl;
     }
-    std::cout << "my_std::clear()" << std::endl;
+    /*std::cout << "my_std::clear()" << std::endl;
     my_vector.clear();
-    std::cout << "We can see the 'garbage-values' because the arrive have been cleared. " << std::endl;
+    my_vector.size();*/
+    std::cout << "my_std::shrink_to_fit()" << std::endl;
+    my_vector.shrink_to_fit();
     /*std::cout << "my_std::max_size()" << my_vector.max_size() << std::endl;
     std::cout << "" << std::endl;*/
 
     // rule of five
-    /*my_std::MyVector<int> my_vector2;
+    my_std::MyVector<int> my_vector2;
     my_vector = my_vector;
     my_vector = my_vector2;
-    my_std::MyVector<int> my_vector3(my_vector);*/
+    my_std::MyVector<int> my_vector3(my_vector);
 
     return 0;
 }
@@ -309,3 +326,27 @@ int main()
 //                                   draft 
 // ----------------------------------------------------------------------------------
 
+//new_arr_capacity = arr_capacity * 1.5;
+                //T* new_arr = new T[new_arr_capacity];
+                //int i = 0;
+                //for (T* ptr = begin_it; ptr != end_it; ptr++) {
+                //    new_arr[i] = *ptr;
+                //    //iterator_position++;
+                //}
+                //iterator_position = new_arr;
+                //end_capacity = &new_arr[new_arr_capacity];
+                //for (T* ptr = iterator_position + 1; ptr != end_capacity; ptr++) {
+                //    *iterator_position = *ptr;
+                //    //iterator_position++;
+                //}
+                //iterator_position = begin_it;
+                //end_it = &new_arr[arr_size];
+                //delete[] arr;
+                //arr = new_arr;
+
+
+/*void arr_shift() {
+
+    T* new_arr = new T[];
+}
+*/
