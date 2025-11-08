@@ -16,10 +16,14 @@ namespace my_std {
     public:
         MyVector() : arr_size(10), arr_capacity(40) {
             arr = new T[arr_capacity];
+            create_some_vec_int();
+            //create_some_vec_char();
+            //create_some_vec_bool();
+            //create_some_vec_obj();
+            //create_some_vec_str();
             begin_it = arr;
             end_it = &arr[arr_size];
             end_capacity = &arr[arr_capacity];
-            create_some_arr();
         }
         MyVector(const MyVector& other) {
             std::cout << "The deep copy constructor was called: " << std::endl;
@@ -98,15 +102,49 @@ namespace my_std {
             }
             std::cout << "" << std::endl;
         }
-        void create_some_arr() {
+        void create_some_vec_int() {
             for (int i = 0; i < arr_size; i++) {
                 arr[i] = i+3;
             }
             show_vector();
         }
+        void create_some_vec_char() {
+            int char_code_finish = 256;
+            for (int char_code_start = 0; char_code_start < char_code_finish; char_code_start++) {
+                arr[char_code_start] = static_cast<char>(char_code_start);
+                if (char_code_start == arr_size) {
+                    break;
+                }
+            }
+            show_vector();
+        }
+        void create_some_vec_bool() {
+            std::cout << std::boolalpha;
+            for (int i = 0; i < arr_size; i++) {
+                if (i % 2 == 0) {
+                    arr[i] = true;
+                }
+                else {
+                    arr[i] = false;
+                }
+            }
+            show_vector();
+        }
+        /*void create_some_vec_obj() {
+            for (int i = 0; i < arr_size; i++) {
+                arr[i] = i + 3;
+            }
+            show_vector();
+        }*/
+        /*void create_some_vec_str() {
+            for (int i = 0; i < arr_size; i++) {
+                arr[i] = i + 3;
+            }
+            show_vector();
+        }*/
         void reallocation() {
             if (arr_capacity <= arr_size) {
-                arr_capacity *= 1.5;
+                arr_capacity *= 3 / 2;
                 T* new_arr = new T[arr_capacity];
                 for (T* ptr = begin_it, *i = new_arr; ptr != end_it; ptr++, i++) {
                     *i = *ptr;
@@ -114,8 +152,8 @@ namespace my_std {
                 delete[] arr;
                 arr = new_arr;
                 begin_it = arr;
-                end_it = &new_arr[arr_size];
-                end_capacity = &new_arr[arr_capacity];
+                end_it = &arr[arr_size];
+                end_capacity = &arr[arr_capacity];
             }
         }
         // The method's complexity should be O(n)(linear time)
@@ -142,7 +180,7 @@ namespace my_std {
             size();
             show_vector(); 
         }
-        // O(1)(constant time)
+        // The method's complexity should be O(1)(constant time)
         void push_back(T a) {
             reallocation();
             *end_it = a;
@@ -150,30 +188,10 @@ namespace my_std {
             arr_size++;
             show_vector();
         }
-        // The method's complexity should be O(1)
+        // O(1)
         void pop_back() {
             end_it--;
             arr_size--;
-        }
-        void insert(T* iterator_position, const int val) {
-            reallocation();
-            show_vector();
-            // O(n)
-            if (iterator_position != end()) {
-                T* end_it_infor = end_it;
-                for (T* ptr = end_it - 1; ptr != iterator_position - 1; ptr--) {
-                    *end_it_infor = *ptr;
-                    end_it_infor--;
-                }
-                arr_size++;
-                end_it = &arr[arr_size];
-                *iterator_position = val;
-            }
-            // O(1)
-            else {
-                push_back(val);
-            }
-            show_vector();
         }
         bool empty() {
             return !arr_size;
@@ -240,12 +258,24 @@ namespace my_std {
         }
     };
 }
-
+class Test {
+    int num;
+    char symb;
+    bool tof;
+public:
+    //Test(){}
+};
 int main()
 {
     my_std::MyVector<int> my_vector;
+    //my_std::MyVector<char> my_vector;
+    //my_std::MyVector<bool> my_vector;
+    Test obj;
+    //my_std::MyVector<Test> my_vector;
     std::cout << "Welcome to MyStdVector! There is a vector<int>: ";
-    //my_vector.create_some_arr();
+    //my_vector.create_some_vec_int();
+    //my_vector.create_some_vec_char();
+    my_vector.create_some_vec_bool();
     std::cout << "" << std::endl;
     std::cout << "my_std::size()" << std::endl;
     my_vector.size();
@@ -257,7 +287,7 @@ int main()
     my_vector.resize(22);
     std::cout << "" << std::endl;
     std::cout << "my_std::push_back()" << std::endl;
-    my_vector.push_back(10);
+    my_vector.push_back(0.452);
     std::cout << "" << std::endl;
     std::cout << "my_std::pop_back()" << std::endl;
     my_vector.pop_back();
@@ -267,15 +297,24 @@ int main()
     my_vector.reserve(50);
     std::cout << "" << std::endl;
     std::cout << "my_std::front()" << std::endl;
+    /*int& front_element = my_vector.front();
+    char& front_element = my_vector.front();*/
     int& front_element = my_vector.front();
+    //Test& front_element = my_vector.front();
     std::cout << front_element << std::endl;
     std::cout << "" << std::endl;
     std::cout << "my_std::back()" << std::endl;
-    int& back_element = my_vector.back();
+    /*int& back_element = my_vector.front();
+    char& back_element = my_vector.front();*/
+    int& back_element = my_vector.front();
+    //Test& back_element = my_vector.front();
     std::cout << back_element << std::endl;
     std::cout << "" << std::endl;
     std::cout << "my_std::data()" << std::endl;
-    int* data_element = my_vector.data();
+    /*int& data_element = my_vector.front();
+    char& data_element = my_vector.front();*/
+    int& data_element = my_vector.front();
+    //Test& data_element = my_vector.front();
     std::cout << data_element << std::endl;
     std::cout << "" << std::endl;
     std::cout << "my_std::at() (correct work)" << std::endl;
@@ -322,30 +361,5 @@ int main()
 }
 
 
-//                                   draft 
+//                                     draft 
 // ----------------------------------------------------------------------------------
-
-//new_arr_capacity = arr_capacity * 1.5;
-                //T* new_arr = new T[new_arr_capacity];
-                //int i = 0;
-                //for (T* ptr = begin_it; ptr != end_it; ptr++) {
-                //    new_arr[i] = *ptr;
-                //    //iterator_position++;
-                //}
-                //iterator_position = new_arr;
-                //end_capacity = &new_arr[new_arr_capacity];
-                //for (T* ptr = iterator_position + 1; ptr != end_capacity; ptr++) {
-                //    *iterator_position = *ptr;
-                //    //iterator_position++;
-                //}
-                //iterator_position = begin_it;
-                //end_it = &new_arr[arr_size];
-                //delete[] arr;
-                //arr = new_arr;
-
-
-/*void arr_shift() {
-
-    T* new_arr = new T[];
-}
-*/
