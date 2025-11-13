@@ -4,11 +4,15 @@ This repository I have decided to make because it can powerfully improve my know
 
 ## My goals in this global project:
 *  **std::vector;**
-*  **smart pointers from <memory> library;**
-*  **std::allocator**
-*  **std::forward_list, std::list**
-*  **std::deque**
-*  **std::map**
+*  **smart pointers from «<memory>» library;**
+*  **std::allocator;**
+*  **std::forward_list, std::list;**
+*  **std::deque;**
+*  **std::map;**
 
 ## Knowledges which i know by creating MySTL:
+*  **RAII;**
 *  **move semantic;**
+*  **Rule of Three/Five/Zero;**
+*  **placement new;**
+*  **O-big notice;**
