@@ -312,6 +312,8 @@ int main()
     }
     str += str3;
     str.show_string();
-
+    std::cout << "Enter some text in string:" << std::endl;
+    std::cin >> str;
+    str.show_string();
     return 0;
 }
