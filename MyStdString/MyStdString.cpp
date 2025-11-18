@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <algorithm>
 #include <stdexcept>
 #include <cstring>
 
@@ -40,19 +41,19 @@ namespace my_std {
             update_pointers();
             show_string();
         }
-        /*MyString(MyString& other) {
-            this->str = new char[other.str_capacity];
-            char* other_temp = other.str;
-            this->str_end = other.str_end;
-            for (char* ptr = this->str; ptr != this->str_end; ptr++) {
-                *ptr = *other_temp;
-                other_temp++;
-            }
+        MyString(const MyString& other) {
             this->str_size = other.str_size;
-            this->str_end = other.str_end;
+            this->str_capacity = other.str_capacity;
+            this->str = new char[this->str_capacity];
+            const char* temp = other.str;
+            for (char* ptr = this->str; ptr != this->str_end; ptr++) {
+                *ptr = *temp;
+                temp++;
+            }
+            this->str_end = &this->str[this->str_size];
             *this->str_end = '\0';
             this->str_end_capacity = &this->str[this->str_capacity];
-        }*/
+        }
         MyString(MyString&& other) noexcept {
             this->str = other.str;
             this->str_size = other.str_size;
@@ -148,13 +149,23 @@ namespace my_std {
             os << other.str;
             return os;
         }
-        /*friend std::istream& operator>>(std::istream& is, MyString& other) {
+        friend std::istream& operator>>(std::istream& is, MyString& other) {
             delete[] other.str;
-            other.str = new char[other.str_capacity];
-            char* new_str = new char[];
-            is >> str;
+            other.str = nullptr;
+            other.str_size = 0;
+            const size_t temp_capacity = 256;
+            char* buffer = new char[temp_capacity];
+            is >> buffer;
+            if (is) {
+                other.str_size = std::strlen(buffer);
+                other.str_capacity = other.str_size + 1;
+                other.str = new char[other.str_capacity];
+                std::copy(buffer, &buffer[other.str_capacity], other.str);
+                other.update_pointers();
+            }
+            delete[] buffer;
             return is;
-        }*/
+        }
         friend bool operator<(const MyString& first, const MyString& second) {
             const char* ptr_first = first.str;
             const char* ptr_second = second.str;
