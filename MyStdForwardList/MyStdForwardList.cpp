@@ -153,12 +153,15 @@ namespace my_std {
             else {
                 if (head->next == nullptr) {
                     delete head;
-                    head == nullptr;
+                    head = nullptr;
                 }
                 else {
-                    Node<T>* oldNode = it->next;
-                    it->next = oldNode->next;
-                    delete oldNode;
+                    if (it->next == nullptr) return;
+                    else {
+                        Node<T>* oldNode = it->next;
+                        it->next = oldNode->next;
+                        delete oldNode;
+                    }
                 }
             }
             size--;
