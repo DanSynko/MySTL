@@ -19,7 +19,7 @@ namespace my_std {
             Color color;
         };
         Node* root;
-
+        size_t tree_size = 0;
 
         /*friend void swap(RedBlackTree& first, RedBlackTree& second) {
             using std::swap;
@@ -254,6 +254,7 @@ namespace my_std {
                         current->right = insert_recursive(current->right, current, val);
                     }
                 }
+                tree_size++;
                 return fixup_properties_insert(current);
             }
         }
@@ -279,6 +280,7 @@ namespace my_std {
                 }
                 delete root;
                 root = new_root;
+                tree_size = 0;
                 return;
             }
             else {
@@ -289,6 +291,7 @@ namespace my_std {
                     Color current_color = current->color;
                     remove_iterative(temp, temp->data);
                     current->data = temp_data;
+                    tree_size--;
                 }
                 else if (current->left == nullptr || current->right == nullptr) {
                     Node* temp = (current->left == nullptr) ? current->right : current->left;
@@ -304,6 +307,7 @@ namespace my_std {
                     if (temp != nullptr) temp->parent = current->parent;
                     delete current;
                     fixup_properties_remove(temp, current_parent, current_data, current_color);
+                    tree_size--;
                 }
             }
         }
@@ -459,6 +463,46 @@ namespace my_std {
         void preorder_traversal() {
             preorder_traversal_recursive(root);
         }
+
+
+
+
+        class Iterator {
+        private:
+            friend class RedBlackTree;
+            Node* ptr;
+            Iterator(Node* current) : ptr(current) {}
+        public:
+            Iterator() : ptr(nullptr) {}
+
+            bool operator==(const Iterator& other) const {
+                return ptr == other.ptr;
+            }
+            bool operator!=(const Iterator& other) const {
+                return ptr != other.ptr;
+            }
+            T& operator*() const {
+                return ptr->data;
+            }
+            const T* operator->() {
+                return &(ptr->data);
+            }
+        };
+
+
+
+
+        void clear() {
+            postorder_delete_recursive();
+            root = nullptr;
+            tree_size = 0;
+        }
+        bool empty() {
+            return !root;
+        }
+        const size_t size() const {
+            return tree_size;
+        }
     };
 
     template<typename T>
@@ -468,12 +512,31 @@ namespace my_std {
     public:
         set() {}
         ~set() {}
+
+        void insert(const T& val) {
+            rbt.insert(val);
+        }
+        void erase(const T& val) {
+            rbt.remove(val);
+        }
+        bool contains(const T& val) {
+            return (rbt.search(val)) ? true : false;
+        }
+
+        const size_t size() const {
+            return rbt.size();
+        }
+
+        bool empty() {
+            return rbt.empty();
+        }
     };
 }
 int main()
 {
     std::cout << "Welcome to my_std_set! There is a set<T> on red-black tree: " << std::endl;
 
+    my_std::set<int> my_set = {};
     
     return 0;
 }
