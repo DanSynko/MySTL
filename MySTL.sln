@@ -21,7 +21,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyStdList", "MyStdList\MySt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "my_std_map", "my_std_map", "{3B52735F-CA57-4E9A-A442-DD759F7C30B6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "my_std_map", "MyStdMap-BST\MyStdMap-BST.vcxproj", "{EF4B10D1-7ED5-4E65-83CB-5FF944A24F01}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "my_std_map", "my_std_map\my_std_map.vcxproj", "{EF4B10D1-7ED5-4E65-83CB-5FF944A24F01}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "my_std_set", "my_std_set\my_std_set.vcxproj", "{6B1A0430-1E48-4657-B5FD-D955FFD1BA91}"
 EndProject

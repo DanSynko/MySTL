@@ -21,20 +21,20 @@ namespace my_std {
         Node* root;
         size_t tree_size = 0;
 
-        /*friend void swap(RedBlackTree& first, RedBlackTree& second) {
+        friend void swap(RedBlackTree& first, RedBlackTree& second) {
             using std::swap;
             swap(first.root, second.root);
-        }*/
-        /*Node* preorder_copy_recursive(Node* other_original, Node* other, Node* prev) {
-            if (other_original->left == nullptr && other_original->right == nullptr) return nullptr;
+        }
+        Node* preorder_copy_recursive(Node* other_node, Node* new_parent) {
+            if (other_node == nullptr) return nullptr;
 
-            Node* current = other;
-            Node* new_root = new Node{ current->data, nullptr, nullptr, prev, current->color };
-            prev = new_root;
-            new_root->left = preorder_copy_recursive(other_original, new_root->left, prev);
-            new_root->right = preorder_copy_recursive(other_original, new_root->right, prev);
-            return new_root;
-        }*/
+            Node* newNode = new Node{ other_node->data, other_node->left, other_node->right, new_parent, other_node->color };
+
+            newNode->left = preorder_copy_recursive(other_node->left, newNode);
+            newNode->right = preorder_copy_recursive(other_node->right, newNode);
+
+            return newNode;
+        }
 
 
 
@@ -239,11 +239,12 @@ namespace my_std {
         }
 
         Node* insert_recursive(Node* current, Node* current_parent, const T& val) {
-            if (current->data == val) {
+            if (current != nullptr && current->data == val) {
                 return nullptr;
             }
             else {
                 if (current == nullptr) {
+                    tree_size++;
                     return new Node{ val, nullptr, nullptr, current_parent, Color::red };
                 }
                 else {
@@ -254,7 +255,6 @@ namespace my_std {
                         current->right = insert_recursive(current->right, current, val);
                     }
                 }
-                tree_size++;
                 return fixup_properties_insert(current);
             }
         }
@@ -420,18 +420,19 @@ namespace my_std {
                 }
             }
         }
-        /*RedBlackTree(const RedBlackTree& other) {
-            root = preorder_copy_recursive(other, other.root, );
-        }*/
+        RedBlackTree(const RedBlackTree& other) : root(nullptr) {
+            this->tree_size = other.tree_size;
+            root = preorder_copy_recursive(other.root, nullptr);
+        }
         RedBlackTree(RedBlackTree&& other) noexcept {
             this->root = other.root;
             other.root = nullptr;
         }
-        /*RedBlackTree& operator =(RedBlackTree other) {
+        RedBlackTree& operator =(RedBlackTree other) {
             using std::swap;
             swap(*this, other);
             return *this;
-        }*/
+        }
 
 
 
@@ -475,6 +476,7 @@ namespace my_std {
         public:
             Iterator() : ptr(nullptr) {}
 
+
             bool operator==(const Iterator& other) const {
                 return ptr == other.ptr;
             }
@@ -503,15 +505,41 @@ namespace my_std {
         const size_t size() const {
             return tree_size;
         }
+
+
+
+
+        static void ruleoffive_rbt_demo() {
+            my_std::RedBlackTree<int> rbt_example = { 0, 1, 1, 2, 3, 5, 8, 13, 21 };
+            my_std::RedBlackTree<int> rbt_example_c_copy(rbt_example);
+            my_std::RedBlackTree<int> rbt_example_c_move = std::move(rbt_example_c_copy);
+            my_std::RedBlackTree<int> rbt_example_op_cas;
+            rbt_example_op_cas = rbt_example_c_move;
+            std::cout << "" << std::endl;
+        }
     };
 
     template<typename T>
     class set {
     private:
         RedBlackTree<T> rbt;
+        friend void swap(set& first, set& second) {
+            using std::swap;
+            swap(first.rbt, second.rbt); // ?
+        }
     public:
-        set() {}
-        ~set() {}
+
+        set(std::initializer_list<T> tree) {
+            for (const auto& val : tree) {
+                insert(val);
+            }
+        }
+        set& operator=(set other) {
+            using std::swap;
+            swap(*this, other);
+            return *this;
+        }
+
 
         void insert(const T& val) {
             rbt.insert(val);
@@ -530,13 +558,20 @@ namespace my_std {
         bool empty() {
             return rbt.empty();
         }
+
+
+        static void ruleoffive_set_demo() {
+            RedBlackTree<int>::ruleoffive_rbt_demo();
+        }
+
     };
 }
 int main()
 {
     std::cout << "Welcome to my_std_set! There is a set<T> on red-black tree: " << std::endl;
 
-    my_std::set<int> my_set = {};
-    
+    my_std::set<int>::ruleoffive_set_demo();
+
+    my_std::set<int> my_set = { 34, 436, 23, 45, 2, 5 };
     return 0;
 }

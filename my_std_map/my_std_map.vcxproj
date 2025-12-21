@@ -22,7 +22,7 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{ef4b10d1-7ed5-4e65-83cb-5ff944a24f01}</ProjectGuid>
-    <RootNamespace>MyStdMapBST</RootNamespace>
+    <RootNamespace>my_std_map</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>my_std_map</ProjectName>
   </PropertyGroup>
@@ -126,7 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MyStdMap-BST.cpp" />
+    <ClCompile Include="my_std_map.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
