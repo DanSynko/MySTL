@@ -14,7 +14,6 @@ namespace my_std {
             red
         };
     private:
-
         struct Node {
             T data;
             Node* right;
@@ -590,7 +589,7 @@ namespace my_std {
         RedBlackTree<T> rbt;
         friend void swap(set& first, set& second) {
             using std::swap;
-            swap(first.rbt, second.rbt); // ?
+            swap(first.rbt, second.rbt);
         }
     public:
         set(std::initializer_list<T> tree) {
