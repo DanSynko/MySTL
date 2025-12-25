@@ -69,7 +69,7 @@ namespace my_std {
             delete[] old_buckets;
         }
 
-        Bucket* check_dublication(const Key& arg_key) {
+        Bucket* check_duplication(const Key& arg_key) {
             Bucket* current = buckets[hash_function(arg_key)];
             while (current != nullptr) {
                 if (current->data.first == arg_key) {
@@ -123,9 +123,9 @@ namespace my_std {
                 rehashing();
             }
 
-            Bucket* dublicat = check_dublication(pair.first);
-            if (dublicat != nullptr) {
-                dublicat->data.second = pair.second;
+            Bucket* duplicate = check_duplication(pair.first);
+            if (duplicate != nullptr) {
+                duplicate->data.second = pair.second;
             }
             else {
                 size_t i = hash_function(pair.first);
@@ -375,7 +375,7 @@ int main()
 
     std::cout << "unordered_map.insert('Website', 'GitHub');" << std::endl;
     my_unordered_map.insert({ "Website", "GitHub" });
-    std::cout << "unordered_map.insert('Website', 'Google');  (create a dublicat)" << std::endl;
+    std::cout << "unordered_map.insert('Website', 'Google');  (create a duplicate)" << std::endl;
     my_unordered_map.insert({ "Website", "Google" });
     std::cout << "unordered_map.insert('Cra', 'Toyota');  (create a collision)" << std::endl;
     my_unordered_map.insert({ "Cra", "Toyota" });
