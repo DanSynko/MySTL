@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MyUniquePtr.cpp">
+    <ClCompile Include="my_std_forward_list.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

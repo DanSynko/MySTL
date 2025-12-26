@@ -3,7 +3,7 @@
 
 namespace my_std {
     template<typename T>
-    class MyForwardList {
+    class forward_list {
     private:
         template<typename T>
         struct Node {
@@ -13,15 +13,15 @@ namespace my_std {
         Node<T>* head;
         size_t size;
 
-        friend void swap(MyForwardList& first, MyForwardList& second) {
+        friend void swap(forward_list& first, forward_list& second) {
             using std::swap;
             swap(first.head, second.head);
             swap(first.size, second.size);
         }
     public:
-        MyForwardList() : head(nullptr), size(0) {}
+        forward_list() : head(nullptr), size(0) {}
 
-        MyForwardList(std::initializer_list<T> list) : head(nullptr), size(0) {
+        forward_list(std::initializer_list<T> list) : head(nullptr), size(0) {
             Node<T>* current = nullptr;
             for (const T& i : list) {
                 Node<T>* newNode = new Node<T>{ i, nullptr };
@@ -36,7 +36,7 @@ namespace my_std {
                 size++;
             }
         }
-        MyForwardList(MyForwardList& other) : head(nullptr), size(other.size) {
+        forward_list(forward_list& other) : head(nullptr), size(other.size) {
             Node<T>* current = nullptr;
             for (Node<T>* other_current = other.head; other_current != nullptr; other_current = other_current->next) {
                 Node<T>* newNode = new Node<T>{ other_current->data, nullptr };
@@ -51,20 +51,20 @@ namespace my_std {
             }
             display();
         }
-        MyForwardList(MyForwardList&& other) noexcept {
+        forward_list(forward_list&& other) noexcept {
             head = other.head;
             size = other.size;
             other.head = nullptr;
             other.size = 0;
             display();
         }
-        MyForwardList& operator=(MyForwardList other) {
+        forward_list& operator=(forward_list other) {
             using std::swap;
             swap(*this, other);
             display();
             return *this;
         }
-        ~MyForwardList() {
+        ~forward_list() {
             clear();
         }
         void clear() {
@@ -83,10 +83,10 @@ namespace my_std {
         }
 
         static void ruleoffive_list_demo() {
-            my_std::MyForwardList<int> forward_list = { 0, 1, 1, 2, 3, 5, 8, 13, 21 };
-            my_std::MyForwardList<int> forward_list_c_copy(forward_list);
-            my_std::MyForwardList<int> forward_list_c_move = std::move(forward_list_c_copy);
-            my_std::MyForwardList<int> forward_list_op_cas;
+            my_std::forward_list<int> forward_list = { 0, 1, 1, 2, 3, 5, 8, 13, 21 };
+            my_std::forward_list<int> forward_list_c_copy(forward_list);
+            my_std::forward_list<int> forward_list_c_move = std::move(forward_list_c_copy);
+            my_std::forward_list<int> forward_list_op_cas;
             forward_list_op_cas = forward_list_c_move;
             std::cout << "" << std::endl;
         }
@@ -232,30 +232,30 @@ namespace my_std {
 int main()
 {
     std::cout << "Rule of five for std::forward_list:" << std::endl;
-    my_std::MyForwardList<int>::ruleoffive_list_demo();
+    my_std::forward_list<int>::ruleoffive_list_demo();
 
     std::cout << "" << std::endl;
-    my_std::MyForwardList<int> init_forward_list = {11, 22, 45, 32, 2025};
+    my_std::forward_list<int> init_forward_list = {11, 22, 45, 32, 2025};
     init_forward_list.display();
 
-    std::cout << "my_std::MyForwardList.push_front()" << std::endl;
+    std::cout << "my_std::forward_list.push_front()" << std::endl;
     init_forward_list.push_front(404);
-    std::cout << "my_std::MyForwardList.pop_front()." << std::endl;
+    std::cout << "my_std::forward_list.pop_front()." << std::endl;
     init_forward_list.pop_front();
-    std::cout << "my_std::MyForwardList.insert_after()." << std::endl;
+    std::cout << "my_std::forward_list.insert_after()." << std::endl;
     auto it_insert = init_forward_list.begin();
     init_forward_list.insert_after(it_insert, 123);
-    std::cout << "my_std::MyForwardList.erase_after()." << std::endl;
+    std::cout << "my_std::forward_list.erase_after()." << std::endl;
     auto it_erase = init_forward_list.begin();
     init_forward_list.erase_after(it_erase);
-    std::cout << "my_std::MyForwardList.resize() (to bigger size)." << std::endl;
+    std::cout << "my_std::forward_list.resize() (to bigger size)." << std::endl;
     init_forward_list.resize(10);
-    std::cout << "my_std::MyForwardList.resize() (to smaller size)." << std::endl;
+    std::cout << "my_std::forward_list.resize() (to smaller size)." << std::endl;
     init_forward_list.resize(3);
-    std::cout << "my_std::MyForwardList.clear()." << std::endl;
+    std::cout << "my_std::forward_list.clear()." << std::endl;
     init_forward_list.clear();
     init_forward_list.display();
-    std::cout << "my_std::MyForwardList.empty()." << std::endl;
+    std::cout << "my_std::forward_list.empty()." << std::endl;
     if(init_forward_list.empty()){
         std::cout << "forward list is empty." << std::endl;
     }

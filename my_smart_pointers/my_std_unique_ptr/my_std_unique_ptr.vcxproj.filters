@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MyStdString.cpp">
+    <ClCompile Include="my_std_unique_ptr.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

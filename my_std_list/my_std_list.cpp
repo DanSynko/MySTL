@@ -3,7 +3,7 @@
 
 namespace my_std {
     template<typename T>
-    class MyList {
+    class list {
     private:
         template<typename T>
         struct Node {
@@ -15,7 +15,7 @@ namespace my_std {
         Node<T>* tail;
         size_t size;
 
-        friend void swap(MyList& first, MyList& second) {
+        friend void swap(list& first, list& second) {
             using std::swap;
             swap(first.head, second.head);
             swap(first.tail, second.tail);
@@ -60,9 +60,9 @@ namespace my_std {
         }
 
     public:
-        MyList() : head(nullptr), tail(nullptr), size(0) {}
+        list() : head(nullptr), tail(nullptr), size(0) {}
 
-        MyList(std::initializer_list<T> list) {
+        list(std::initializer_list<T> list) {
             Node<T>* current = nullptr;
             for (const T& i : list) {
                 Node<T>* newNode = new Node<T>{ i, nullptr, nullptr };
@@ -80,7 +80,7 @@ namespace my_std {
             tail = current;
             display();
         }
-        MyList(MyList& other) {
+        list(list& other) {
             Node<T>* current = nullptr;
             for (Node<T>* other_current = other.head; other_current != nullptr; other_current = other_current->next) {
                 Node<T>* newNode = new Node<T>{ other_current->data, nullptr, nullptr };
@@ -97,7 +97,7 @@ namespace my_std {
             }
             display();
         }
-        MyList(MyList&& other) noexcept {
+        list(list&& other) noexcept {
             this->head = other.head;
             this->tail = other.tail;
             this->size = other.size;
@@ -105,13 +105,13 @@ namespace my_std {
             other.tail = nullptr;
             other.size = 0;
         }
-        MyList& operator=(MyList other) {
+        list& operator=(list other) {
             using std::swap;
             swap(*this, other);
             display();
             return *this;
         }
-        ~MyList() {
+        ~list() {
             clear();
         }
         void clear() {
@@ -131,10 +131,10 @@ namespace my_std {
         }
 
         static void ruleoffive_list_demo() {
-            my_std::MyList<int> list = { 0, 1, 1, 2, 3, 5, 8, 13, 21 };
-            my_std::MyList<int> list_c_copy(list);
-            my_std::MyList<int> list_c_move = std::move(list_c_copy);
-            my_std::MyList<int> list_op_cas = list_c_move;
+            my_std::list<int> list = { 0, 1, 1, 2, 3, 5, 8, 13, 21 };
+            my_std::list<int> list_c_copy(list);
+            my_std::list<int> list_c_move = std::move(list_c_copy);
+            my_std::list<int> list_op_cas = list_c_move;
             std::cout << "" << std::endl;
         }
 
@@ -308,19 +308,19 @@ namespace my_std {
 int main()
 {
     std::cout << "Rule of five for std::list:" << std::endl;
-    my_std::MyList<int>::ruleoffive_list_demo();
+    my_std::list<int>::ruleoffive_list_demo();
 
-    my_std::MyList<int> init_list = { 5, 15, 20, 25, 30, 35 };
+    my_std::list<int> init_list = { 5, 15, 20, 25, 30, 35 };
     init_list.display();
 
-    std::cout << "my_std::MyList.push_front(404)" << std::endl;
+    std::cout << "my_std::list.push_front(404)" << std::endl;
     init_list.push_front(404);
-    std::cout << "my_std::MyList.pop_front()." << std::endl;
+    std::cout << "my_std::list.pop_front()." << std::endl;
     init_list.pop_front();
-    std::cout << "my_std::MyList.insert_after(123)." << std::endl;
+    std::cout << "my_std::list.insert_after(123)." << std::endl;
     auto it_insert = init_list.begin();
     init_list.insert_after(it_insert, 123);
-    std::cout << "my_std::MyList.erase_after()." << std::endl;
+    std::cout << "my_std::list.erase_after()." << std::endl;
     auto it_erase = init_list.begin();
     init_list.erase_after(it_erase);
     std::cout << "my_std::MyForwardList.resize() (to bigger size)." << std::endl;

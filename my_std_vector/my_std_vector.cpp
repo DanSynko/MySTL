@@ -8,7 +8,7 @@
 
 namespace my_std {
     template<typename T>
-    class MyVector {
+    class vector {
     private:
         T* arr;
         T* begin_it;
@@ -27,7 +27,7 @@ namespace my_std {
             end_it = &arr[arr_size];
             end_capacity = &arr[arr_capacity];
         }
-        friend void swap(MyVector& first, MyVector& second) {
+        friend void swap(vector& first, vector& second) {
             using std::swap;
             swap(first.arr, second.arr);
             swap(first.begin_it, second.begin_it);
@@ -52,14 +52,14 @@ namespace my_std {
             update_pointers();
         }
     public:
-        MyVector() : arr_size(10), arr_capacity(40) {
+        vector() : arr_size(10), arr_capacity(40) {
             arr = static_cast<T*>(operator new(arr_capacity * sizeof(T)));
             begin_it = arr;
             end_it = &arr[arr_size];
             end_capacity = &arr[arr_capacity];
             create_some_vec_obj();
         } 
-        MyVector(const MyVector& other) : arr_size(other.arr_size), arr_capacity(other.arr_capacity) {
+        vector(const vector& other) : arr_size(other.arr_size), arr_capacity(other.arr_capacity) {
             std::cout << "The deep copy constructor was called: " << std::endl;
             this->arr = static_cast<T*>(operator new(this->arr_capacity * sizeof(T)));
             this->end_it = &this->arr[this->arr_size];
@@ -69,7 +69,7 @@ namespace my_std {
             std::cout << "A new vector created by deep copy constructor: " << std::endl;
             this->show_vector();
         }
-        MyVector(MyVector&& other) noexcept {
+        vector(vector&& other) noexcept {
             std::cout << "The move constructor was called: " << std::endl;
             this->arr_size = other.arr_size;
             this->arr_capacity = other.arr_capacity;
@@ -86,14 +86,14 @@ namespace my_std {
             std::cout << "A new vector created by move constructor: " << std::endl;
             this->show_vector();
         }
-        MyVector& operator=(MyVector other) noexcept {
+        vector& operator=(vector other) noexcept {
             using std::swap;
             swap(*this, other);
             std::cout << "A new vector after overloaded operator=(with copy-and-swap): " << std::endl;
             this->show_vector();
             return *this;
         }
-        ~MyVector() {
+        ~vector() {
             std::cout << "The destructor of vector was called. " << std::endl;
             destroy_elements();
             operator delete (arr);
@@ -102,7 +102,7 @@ namespace my_std {
             end_capacity = nullptr;
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const MyVector& other) {
+        friend std::ostream& operator<<(std::ostream& os, const vector& other) {
             os << other;
             return os;
 		}
@@ -313,7 +313,7 @@ public:
 int main()
 {
     std::cout << "Welcome to MyStdVector! There is a vector<custom_type>: " << std::endl;
-    my_std::MyVector<Test<int>> my_vector;
+    my_std::vector<Test<int>> my_vector;
     std::cout << "(The output of the object's memory contents(like 0, 1, 2) only occurs within its constructor.)" << std::endl;
     std::cout << "" << std::endl;
     std::cout << "my_std::size()" << std::endl;
@@ -367,25 +367,25 @@ int main()
     std::cout << "rule of five: \n" << std::endl;
 
     std::cout << "deep copy constructor: " << std::endl;
-    my_std::MyVector<Test<int>> my_vector_dp(my_vector);
+    my_std::vector<Test<int>> my_vector_dp(my_vector);
 
     std::cout << "\n";
 
     std::cout << "move constructor: " << std::endl;
     std::cout << "a new vector for move constructor: " << std::endl;
-    my_std::MyVector<Test<int>> my_vector_rval;
-    my_std::MyVector<Test<int>> my_vector_m = std::move(my_vector_rval);
+    my_std::vector<Test<int>> my_vector_rval;
+    my_std::vector<Test<int>> my_vector_m = std::move(my_vector_rval);
 
     std::cout << "\n";
     std::cout << "deep copy operator=: " << std::endl;
     std::cout << "a new vector for deep copy operator=: " << std::endl;
-    my_std::MyVector<Test<int>> my_vector_dp_op;
+    my_std::vector<Test<int>> my_vector_dp_op;
     my_vector_dp_op = my_vector;
 
     std::cout << "\n";
     std::cout << "move operator=: " << std::endl;
     std::cout << "a new vector for move operator=: " << std::endl;
-    my_std::MyVector<Test<int>> my_vector_rval2;
+    my_std::vector<Test<int>> my_vector_rval2;
     my_vector_dp = std::move(my_vector_rval2);
 
 
